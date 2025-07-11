@@ -2,6 +2,7 @@ package com.shippingservice.kafka;
 
 import com.shippingservice.dto.OrderMessage;
 import com.shippingservice.service.ShippingService;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,15 +14,9 @@ public class OrderValidatedListener {
         this.shippingService = shippingService;
     }
 
-    public void simulateKafkaMessage(OrderMessage orderMessage) {
-        if (orderMessage.getStatus() == null || !orderMessage.getStatus().equals("VALIDATED")) {
-            System.out.println("Skipping non-validated order");
-            return;
-        }
-
-        OrderMessage shipped = shippingService.shipOrder(orderMessage);
-        System.out.println("Publishing to topic: order.shipped → " + shipped.getId());
-
-        // Тут буде Kafka-продюсер
+    @KafkaListener(topics = "order.validated", groupId = "shipping-group")
+    public void listen(OrderMessage orderMessage) {
+        System.out.println("📥 Received from order.validated: " + orderMessage.getId());
+        shippingService.handleValidatedOrder(orderMessage);
     }
 }
