@@ -3,7 +3,7 @@ package com.orderservice.order.service;
 import com.orderservice.order.dto.CreateOrderRequest;
 import com.orderservice.order.dto.OrderResponse;
 import com.orderservice.order.kafka.OrderProducer;
-import com.orderservice.order.model.Order;
+import com.orderservice.order.model.OrderMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,28 +12,28 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final ConcurrentHashMap<String, Order> store = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, OrderMessage> store = new ConcurrentHashMap<>();
     private final OrderProducer orderProducer;
 
     public OrderResponse createOrder(CreateOrderRequest request) {
-        Order order = new Order(request.getProductId(), request.getQuantity());
-        store.put(order.getId(), order);
+        OrderMessage orderMessage = new OrderMessage(request.getProductId(), request.getQuantity());
+        store.put(orderMessage.getId(), orderMessage);
 
-        orderProducer.sendOrder(order); // <-- надсилаємо в Kafka
+        orderProducer.sendOrder(orderMessage); // <-- надсилаємо в Kafka
 
-        return mapToResponse(order);
+        return mapToResponse(orderMessage);
     }
 
-    public Order getOrderById(String id) {
+    public OrderMessage getOrderById(String id) {
         return store.get(id);
     }
 
-    private OrderResponse mapToResponse(Order order) {
+    private OrderResponse mapToResponse(OrderMessage orderMessage) {
         OrderResponse response = new OrderResponse();
-        response.setId(order.getId());
-        response.setProductId(order.getProductId());
-        response.setQuantity(order.getQuantity());
-        response.setStatus(order.getStatus());
+        response.setId(orderMessage.getId());
+        response.setProductId(orderMessage.getProductId());
+        response.setQuantity(orderMessage.getQuantity());
+        response.setStatus(orderMessage.getStatus());
         return response;
     }
 }

@@ -2,7 +2,7 @@ package com.orderservice.order.controller;
 
 import com.orderservice.order.dto.CreateOrderRequest;
 import com.orderservice.order.dto.OrderResponse;
-import com.orderservice.order.model.Order;
+import com.orderservice.order.model.OrderMessage;
 import com.orderservice.order.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getById(@PathVariable String id) {
+    public OrderMessage getById(@PathVariable String id) {
         return service.getOrderById(id);
     }
 }

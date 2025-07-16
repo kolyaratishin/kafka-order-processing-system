@@ -12,7 +12,7 @@ public class OrderCreatedListener {
 
     private final InventoryService inventoryService;
 
-    @KafkaListener(topics = "order.created", groupId = "inventory-group")
+    @KafkaListener(topics = "order.created", groupId = "inventory-group", containerFactory = "kafkaListenerContainerFactory")
     public void listen(OrderMessage orderMessage) {
         System.out.println("📥 Received from order.created: " + orderMessage.getId());
         inventoryService.handleOrder(orderMessage);

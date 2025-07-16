@@ -1,6 +1,7 @@
 package com.inventoryservice.config;
 
 import com.inventoryservice.dto.OrderMessage;
+import com.inventoryservice.kafka.OrderMessageSerializer;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -20,7 +21,7 @@ public class KafkaProducerConfig {
                 Map.of(
                         ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
                         ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-                        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
+                        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, OrderMessageSerializer.class
                 )
         );
     }

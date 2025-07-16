@@ -8,13 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Order {
+public class OrderMessage {
     private String id;
     private String productId;
     private int quantity;
     private OrderStatus status;
 
-    public Order(String productId, int quantity) {
+    public OrderMessage(String productId, int quantity) {
         this.id = UUID.randomUUID().toString();
         this.productId = productId;
         this.quantity = quantity;

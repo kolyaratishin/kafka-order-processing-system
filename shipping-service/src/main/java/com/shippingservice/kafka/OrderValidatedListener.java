@@ -14,7 +14,7 @@ public class OrderValidatedListener {
         this.shippingService = shippingService;
     }
 
-    @KafkaListener(topics = "order.validated", groupId = "shipping-group")
+    @KafkaListener(topics = "order.validated", groupId = "shipping-group", containerFactory = "kafkaListenerContainerFactory")
     public void listen(OrderMessage orderMessage) {
         System.out.println("📥 Received from order.validated: " + orderMessage.getId());
         shippingService.handleValidatedOrder(orderMessage);

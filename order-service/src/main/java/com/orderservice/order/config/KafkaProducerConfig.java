@@ -1,6 +1,7 @@
 package com.orderservice.order.config;
 
-import com.orderservice.order.model.Order;
+import com.orderservice.order.kafka.OrderMessageSerializer;
+import com.orderservice.order.model.OrderMessage;
 import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -15,18 +16,18 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 public class KafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, Order> producerFactory() {
+    public ProducerFactory<String, OrderMessage> producerFactory() {
         return new DefaultKafkaProducerFactory<>(
                 Map.of(
                         ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
                         ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-                        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
+                        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, OrderMessageSerializer.class
                 )
         );
     }
 
     @Bean
-    public KafkaTemplate<String, Order> kafkaTemplate() {
+    public KafkaTemplate<String, OrderMessage> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
